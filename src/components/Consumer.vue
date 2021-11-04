@@ -49,7 +49,6 @@ export default {
       try {
         const response = await fetch(this.api, this.config)
         this.httpResponse = response
-        console.log(this.httpResponse)
         this.response = await response.json()
       } catch (error) {
         this.error = error
