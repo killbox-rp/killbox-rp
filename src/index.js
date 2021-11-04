@@ -53,7 +53,8 @@ const expressSessionCookie = () => {
     app.set('trust proxy', 1)
     return {
       ...cookie,
-      secure: true
+      secure: true,
+      sameSite: 'none'
     }
   }
   return { ...cookie }
