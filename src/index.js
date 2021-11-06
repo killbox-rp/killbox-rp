@@ -42,7 +42,8 @@ const postgresStoreConfig = () => {
   } : true
   const conString = NODE_ENV === 'dev' ? `${POSTGRES_CONN_STR}?sslmode=no-verify` : `${POSTGRES_CONN_STR}`
   return {
-    conString
+    conString,
+    ssl
   }
 }
 
