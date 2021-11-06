@@ -101,7 +101,7 @@ module.exports = (app, passport, db) => {
     return res.redirect(`/api/v2/users/${user.uname}`)
   })
   
-  app.get('/api/v2/users/:username', db.connected(), authorized(), (req, res) => {
+  app.get('/api/v2/users/:username', db.connected(), authenticated, (req, res) => {
     const { params, user } = req
     const { username } = params
     console.log('user', user, username)
