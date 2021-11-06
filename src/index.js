@@ -4,7 +4,7 @@ const {
   EXPRESS_SESSION_SECRET,
   CORS_ORIGIN,
   API_ENV,
-  PORT
+  API_PORT
 } = process.env
 
 console.clear()
@@ -15,7 +15,7 @@ console.log({
   EXPRESS_SESSION_SECRET,
   CORS_ORIGIN,
   API_ENV,
-  PORT
+  API_PORT
 })
 
 const path = require('path')
@@ -49,14 +49,14 @@ const expressSessionCookie = (app) => {
   const cookie = {
     expires: 1000 * 60 * 60 * 24 * 3 // 3 days
   }
-  // if (NODE_ENV === 'prod') {
-  //   app.set('trust proxy', 1)
-  //   return {
-  //     ...cookie,
-  //     secure: true,
-  //     sameSite: 'none'
-  //   }
-  // }
+  if (NODE_ENV === 'prod') {
+    // app.set('trust proxy', 1)
+    return {
+      ...cookie,
+      secure: true,
+      sameSite: 'none'
+    }
+  }
   return { ...cookie }
 }
 
@@ -80,4 +80,4 @@ app.use((req, res, next) => {
 configurePassport(app, passport)
 configureRoutes(app, passport)
 
-app.listen(PORT, () => console.log(`listening on ${PORT} from ${API_ENV}`))
+app.listen(API_PORT, () => console.log(`listening on ${API_PORT} from ${API_ENV}`))
