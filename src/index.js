@@ -38,12 +38,14 @@ const app = express()
 const origin = CORS_ORIGIN
 
 const postgresStoreConfig = () => {
-  const conString = NODE_ENV === 'dev' ? `${POSTGRES_CONN_STR}?sslmode=no-verify` : `${POSTGRES_CONN_STR}?sslmode=verify-ca`
+  const conString = NODE_ENV === 'dev' ? `${POSTGRES_CONN_STR}?sslmode=no-verify` : `${POSTGRES_CONN_STR}?sslmode=require`
+  const ssl = NODE_ENV === 'dev' ? {
+    require: true,
+    rejectUnauthorized: false
+  } : {
+    require: true
+  }
   if (NODE_ENV === 'dev') {
-    const ssl = NODE_ENV === 'dev' ? {
-      require: true,
-      rejectUnauthorized: false
-    } : {}
     return {
       conString,
       ssl
