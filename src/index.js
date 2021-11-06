@@ -1,11 +1,12 @@
 const {
   NODE_ENV,
+  API_ENV,
   POSTGRES_CONN_STR,
   EXPRESS_SESSION_SECRET,
   CORS_ORIGIN,
-  API_ENV,
   PORT,
-  API_PORT
+  API_PORT,
+  PGSSLMODE
 } = process.env
 
 console.clear()
@@ -16,7 +17,8 @@ console.log({
   EXPRESS_SESSION_SECRET,
   CORS_ORIGIN,
   API_ENV,
-  API_PORT
+  API_PORT,
+  PGSSLMODE
 })
 
 const path = require('path')
@@ -39,10 +41,12 @@ const postgresStoreConfig = () => {
   const ssl = NODE_ENV === 'dev' ? {
     require: true,
     rejectUnauthorized: false
-  } : true
-  const conString = NODE_ENV === 'dev' ? `${POSTGRES_CONN_STR}?sslmode=no-verify` : `${POSTGRES_CONN_STR}?ssl=true`
+  } : {}
+  const sslmode = NODE_ENV === 'dev' ? 'disable' : PGSSLMODE
+  const conString = NODE_ENV === 'dev' ? `${POSTGRES_CONN_STR}?sslmode=no-verify` : `${POSTGRES_CONN_STR}`
   return {
     conString,
+    sslmode,
     ssl
   }
 }
