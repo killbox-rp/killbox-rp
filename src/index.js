@@ -50,14 +50,7 @@ const expressSessionCookie = (app) => {
     expires: 1000 * 60 * 60 * 24 * 3 // 3 days
   }
   if (NODE_ENV === 'prod') {
-    app.set('trust proxy')
-    app.use(function(req, res, next){
-      if (req.header('x-forwarded-proto') !== 'https') {
-        res.redirect(`https://${req.header('host')}`)
-      } else {
-        next()
-      }
-    })
+    app.set('trust proxy', 1)
     return {
       ...cookie,
       secure: true,
