@@ -54,7 +54,8 @@ const postgresStoreConfig = () => {
     const sslmode = NODE_ENV === 'dev' ? 'disable' : PGSSLMODE
     return {
       conString,
-      sslmode
+      sslmode,
+      ssl
     }
   }
 }
