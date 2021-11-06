@@ -109,8 +109,8 @@ module.exports = (app, passport, db) => {
       simpleQuery(
         req, res, 
         `select a.uname, a.uborn,
-          convert_from(decrypt(a.nakey::bytea, 'secret-key', 'bf'), 'utf-8') as nakey,
-          convert_from(decrypt(a.dakey::bytea, 'secret-key', 'bf'), 'utf-8') as dakey,
+          convert_from(decrypt(a.nakey::bytea, '${DB_SECRET_KEY}', 'bf'), 'utf-8') as nakey,
+          convert_from(decrypt(a.dakey::bytea, '${DB_SECRET_KEY}', 'bf'), 'utf-8') as dakey,
           b.* from users a, servers b where a.uname = $1 and b.uid = a.uid`,
         [username],
         () => {
@@ -120,8 +120,8 @@ module.exports = (app, passport, db) => {
             `select 
               a.uname,
               a.uborn,
-              convert_from(decrypt(a.nakey::bytea, 'secret-key', 'bf'), 'utf-8') as nakey,
-              convert_from(decrypt(a.dakey::bytea, 'secret-key', 'bf'), 'utf-8') as dakey
+              convert_from(decrypt(a.nakey::bytea, '${DB_SECRET_KEY}', 'bf'), 'utf-8') as nakey,
+              convert_from(decrypt(a.dakey::bytea, '${DB_SECRET_KEY}', 'bf'), 'utf-8') as dakey
             from 
               users a
             where a.uname = $1`,
