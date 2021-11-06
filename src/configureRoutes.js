@@ -87,7 +87,7 @@ module.exports = (app, passport, db) => {
       res.status(500)
       res.send(error)
       res.end()
-      cb(e)
+      cb(error)
     }
   }
 
