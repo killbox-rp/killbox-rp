@@ -101,8 +101,40 @@ module.exports = (app, passport, db) => {
     return res.redirect(`/api/v2/users/${user.uname}`)
   })
   
-  app.get('/api/v2/users/:uname', db.connected(), authenticated, async (req, res) => {
-    return res.json({ message: 'yo' })
+  app.get('/api/v2/users/:username', db.connected(), authorized(), (req, res) => {
+    const { params, user } = req
+    const { username } = params
+    console.log('user', user, username)
+    if (user.uname === username) {
+      simpleQuery(
+        req, res, 
+        `select a.uname, a.uborn,
+          convert_from(decrypt(a.nakey::bytea, 'secret-key', 'bf'), 'utf-8') as nakey,
+          convert_from(decrypt(a.dakey::bytea, 'secret-key', 'bf'), 'utf-8') as dakey,
+          b.* from users a, servers b where a.uname = $1 and b.uid = a.uid`,
+        [username],
+        () => {
+          // in case they haven't registered a server yet, send this back
+          simpleQuery(
+            req, res, 
+            `select 
+              a.uname,
+              a.uborn,
+              convert_from(decrypt(a.nakey::bytea, 'secret-key', 'bf'), 'utf-8') as nakey,
+              convert_from(decrypt(a.dakey::bytea, 'secret-key', 'bf'), 'utf-8') as dakey
+            from 
+              users a
+            where a.uname = $1`,
+            [username],
+            () => {}
+          )
+        },
+        true, // compress,
+        true // dilute
+      )
+    } else {
+      simpleQuery(req, res, "select uname, uborn from users where uname = $1", [username])
+    }
   })
 
   app.put('/api/v2/users/:username', db.connected(), authenticated, upload.none(), (req, res) => {
@@ -192,7 +224,7 @@ module.exports = (app, passport, db) => {
     }
   })
 
-  app.post('/api/v2/confirm-email/:key', db.connected(), authenticated, async (req, res) => {
+  app.post('/api/v2/confirm-email/:key', db.connected(), async (req, res) => {
     const { params } = req
     const { key } = params
     try {

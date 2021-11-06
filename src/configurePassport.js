@@ -12,28 +12,28 @@ const {
 
 const { Strategy: LocalStrategy } = require('passport-local')
 
-const localStrategyConfig = {
-  usernameField: 'username',
-  passwordField: 'password'
-}
-
-const localStrategyHandler = async (username, password, done) => {
-  try {
-    const query = 'select uid, uname, uborn, uconfirmed from users where uname = $1 and upassword = crypt($2, upassword)'
-    const params = [username, password]
-    const result = await db.query(query, params)
-    if (result.rows.length < 1) {
-      return done(null, false)
-    } else {
-      return done(null, { ...result.rows[0], id: result.rows[0].uid })
-    }
-  } catch (error) {
-    console.log(error)
-    return done(error, false)
-  }
-}
-
 module.exports = (app, passport, db) => {
+
+  const localStrategyConfig = {
+    usernameField: 'username',
+    passwordField: 'password'
+  }
+  
+  const localStrategyHandler = async (username, password, done) => {
+    try {
+      const query = 'select uid, uname, uborn, uconfirmed from users where uname = $1 and upassword = crypt($2, upassword)'
+      const params = [username, password]
+      const result = await db.query(query, params)
+      if (result.rows.length < 1) {
+        return done(null, false)
+      } else {
+        return done(null, { ...result.rows[0], id: result.rows[0].uid })
+      }
+    } catch (error) {
+      console.log(error)
+      return done(error, false)
+    }
+  }
 
   passport.serializeUser((user, done) => {
     return done(null, user.uid)
