@@ -55,7 +55,7 @@ const postgresStoreConfig = () => {
     return {
       conString,
       // sslmode,
-      // ssl
+      ssl: true
     }
   }
 }
