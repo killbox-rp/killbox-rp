@@ -55,7 +55,7 @@ const postgresStoreConfig = () => {
     return {
       conString,
       sslmode: 'require',
-      ssl: true
+      ssl: { rejectUnauthorized: false }
     }
   }
 }
