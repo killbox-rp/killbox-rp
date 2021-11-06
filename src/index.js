@@ -4,6 +4,7 @@ const {
   EXPRESS_SESSION_SECRET,
   CORS_ORIGIN,
   API_ENV,
+  PORT,
   API_PORT
 } = process.env
 
@@ -80,4 +81,4 @@ app.use((req, res, next) => {
 configurePassport(app, passport)
 configureRoutes(app, passport)
 
-app.listen(API_PORT, () => console.log(`listening on ${API_PORT} from ${API_ENV}`))
+app.listen(API_PORT || PORT, () => console.log(`listening on ${API_PORT || PORT} from ${API_ENV}`))
