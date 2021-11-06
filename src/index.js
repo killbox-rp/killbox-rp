@@ -51,7 +51,7 @@ const expressSessionCookie = (app) => {
     expires: 1000 * 60 * 60 * 24 * 3 // 3 days
   }
   if (NODE_ENV === 'prod') {
-    // app.set('trust proxy', 1)
+    app.set('trust proxy', 1)
     return {
       ...cookie,
       secure: true,
