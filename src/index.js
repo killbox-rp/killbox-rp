@@ -6,7 +6,8 @@ const {
   CORS_ORIGIN,
   PORT,
   API_PORT,
-  PGSSLMODE
+  PGSSLMODE,
+  DB_SECRET_KEY
 } = process.env
 
 console.clear()
@@ -26,10 +27,11 @@ const express = require('express')
 const passport = require('passport')
 const session = require('express-session')
 const PostgreSqlStore = require('connect-pg-simple')(session)
+const pg = require('pg')
+const getDb = require('./getDb.js')
 const morgan = require('morgan')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-const crypto = require('crypto')
 const configureRoutes = require('./configureRoutes.js')
 const configurePassport = require('./configurePassport.js')
 const { version } = require('../package.json')
@@ -77,7 +79,8 @@ app.use((req, res, next) => {
   next()
 })
 
-configurePassport(app, passport)
-configureRoutes(app, passport)
+const db = getDb(`${POSTGRES_CONN_STR}?sslmode=no-verify`)
+configurePassport(app, passport, db)
+configureRoutes(app, passport, db)
 
 app.listen(API_PORT || PORT, () => console.log(`listening on ${API_PORT || PORT} from ${API_ENV}`))
