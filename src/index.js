@@ -54,7 +54,7 @@ const expressSessionCookie = () => {
     return {
       ...cookie,
       // secure: true,
-      // sameSite: 'none'
+      sameSite: 'none'
     }
   }
   return { ...cookie }
