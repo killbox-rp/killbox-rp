@@ -17,7 +17,7 @@ const localStrategyConfig = {
   passwordField: 'password'
 }
 
-const localStrategyHandler = (username, password, done) => {
+const localStrategyHandler = async (username, password, done) => {
   try {
     const query = 'select uid, uname, uborn, uconfirmed from users where uname = $1 and upassword = crypt($2, upassword)'
     const params = [username, password]
@@ -39,7 +39,7 @@ module.exports = (app, passport, db) => {
     return done(null, user.uid)
   })
   
-  passport.deserializeUser((id, done) => {
+  passport.deserializeUser(async (id, done) => {
     try {
       const query = `
         select uid, uname, uborn,
