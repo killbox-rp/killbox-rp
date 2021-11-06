@@ -45,12 +45,12 @@ const postgresStoreConfig = () => {
   }
 }
 
-const expressSessionCookie = () => {
+const expressSessionCookie = (app) => {
   const cookie = {
     expires: 1000 * 60 * 60 * 24 * 3 // 3 days
   }
   if (NODE_ENV === 'prod') {
-    // app.set('trust proxy', 1)
+    app.set('trust proxy')
     return {
       ...cookie,
       secure: true,
@@ -70,7 +70,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   store: new PostgreSqlStore(postgresStoreConfig()),
-  cookie: expressSessionCookie()
+  cookie: expressSessionCookie(app)
 }))
 app.use((req, res, next) => {
   res.set('X-Jammer-1-API-Version', `v${version}`)
