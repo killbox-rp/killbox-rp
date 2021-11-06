@@ -51,6 +51,13 @@ const expressSessionCookie = (app) => {
   }
   if (NODE_ENV === 'prod') {
     app.set('trust proxy')
+    app.use(function(req, res, next){
+      if (req.header('x-forwarded-proto') !== 'https') {
+        res.redirect(`https://${req.header('host')}`)
+      } else {
+        next()
+      }
+    })
     return {
       ...cookie,
       secure: true,
