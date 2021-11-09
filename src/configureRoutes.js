@@ -98,7 +98,15 @@ module.exports = (app, passport, db) => {
   
   app.post('/api/v2/authenticate', passport.authenticate('local', { failureRedirect: '/api/v2/unauthorized', failureMessage: true }), async (req, res) => {
     const { user } = req
-    return res.redirect(`/api/v2/users/${user.uname}`)
+    const { uname, uconfirmed } = user
+    console.log('uconfirmed', uconfirmed)
+    if (`${uconfirmed}` === `${1}`) {
+      return res.redirect(`/api/v2/users/${user.uname}`)
+    } else {
+      res.status(400)
+      res.send({ uconfirmed: uconfirmed })
+      return res.end()
+    }
   })
   
   app.get('/api/v2/users/:username', db.connected(), authenticated, (req, res) => {
