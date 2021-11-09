@@ -97,7 +97,7 @@ module.exports = (app, passport, db) => {
     res.json({ message })
   })
 
-  app.get('/dayz_gamepedia/*', db.connected(), authenticated, async (res, res) => {
+  app.get('/dayz_gamepedia/*', db.connected(), authenticated, async (req, res) => {
     const request = url.parse(req.url)
 
     const options = {
