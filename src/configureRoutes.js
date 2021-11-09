@@ -12,6 +12,7 @@ const {
   ARCHAEON_PLATFORM_GMAIL_PASSWORD
 } = process.env
 
+const https = require('https')
 const crypto = require('crypto')
 const nodemailer = require('nodemailer')
 const multer = require('multer')
@@ -94,6 +95,42 @@ module.exports = (app, passport, db) => {
   app.get('/', async (req, res) => {
     const message = 'hi'
     res.json({ message })
+  })
+
+  app.get('/dayz_gamepedia/*', db.connected(), authenticated, async (res, res) => {
+    const request = url.parse(req.url)
+
+    const options = {
+        host:    'static.wikia.nocookie.net',
+        port:    443,
+        path:    request.path,
+        method:  req.method,
+        headers: {},
+    }
+    
+    // console.log(`${options.method} https://${options.host}${options.path}`)
+    
+    const backend_req = https.request(options, (backend_res) => {
+    
+        res.writeHead(backend_res.statusCode, backend_res.headers)
+    
+        backend_res.on('data', (chunk) => {
+            res.write(chunk)
+        })
+    
+        backend_res.on('end', () => {
+            res.end()
+        })
+    
+    })
+    
+    req.on('data', (chunk) => {
+        backend_req.write(chunk)
+    })
+    
+    req.on('end', () => {
+        backend_req.end()
+    })
   })
   
   app.post('/api/v2/authenticate', passport.authenticate('local', { failureRedirect: '/api/v2/unauthorized', failureMessage: true }), async (req, res) => {
