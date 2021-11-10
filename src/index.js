@@ -46,7 +46,7 @@ const app = express()
 const origin = CORS_ORIGIN
 
 const postgresStoreConfig = () => {
-  const conString = `${POSTGRES_CONN_STR}?sslmode=no-verify`
+  const conString = `${POSTGRES_CONN_STR}`
   return {
     conString,
     ssl: { rejectUnauthorized: false }
