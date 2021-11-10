@@ -85,7 +85,7 @@ app.use((req, res, next) => {
   next()
 })
 
-const db = getDb(`${POSTGRES_CONN_STR}?sslmode=no-verify`)
+const db = getDb(`${POSTGRES_CONN_STR}`)
 configurePassport(app, passport, db)
 configureRoutes(app, passport, db)
 

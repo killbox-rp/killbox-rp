@@ -14,7 +14,7 @@ const pgConStr = require('pg-connection-string')
 const { Client } = pg
 
 const getDb = (conStr) => {
-  const dbClient = new Client(pgConStr.parse(conStr))
+  const dbClient = new Client({ ...pgConStr.parse(conStr), ssl: { rejectUnauthorized: false }})
   const db = {
     $connected: false,
     query (query, params) {
