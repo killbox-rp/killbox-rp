@@ -44,9 +44,10 @@ const { version } = require('../package.json')
 
 const app = express()
 const origin = CORS_ORIGIN
+const postgresConnectionString = `${POSTGRES_CONN_STR}?sslmode=require`
 
 const postgresStoreConfig = () => {
-  const conString = `${POSTGRES_CONN_STR}`
+  const conString = postgresConnectionString
   return {
     conString,
     ssl: { rejectUnauthorized: false }
@@ -85,7 +86,7 @@ app.use((req, res, next) => {
   next()
 })
 
-const db = getDb(`${POSTGRES_CONN_STR}`)
+const db = getDb(postgresConnectionString)
 configurePassport(app, passport, db)
 configureRoutes(app, passport, db)
 
