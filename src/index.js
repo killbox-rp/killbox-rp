@@ -44,7 +44,7 @@ const { version } = require('../package.json')
 
 const app = express()
 const origin = CORS_ORIGIN
-const postgresConnectionString = `${POSTGRES_CONN_STR}?ssl=true`
+const postgresConnectionString = `${POSTGRES_CONN_STR}?sslmode=no-verify`
 
 const postgresStoreConfig = () => {
   const conString = postgresConnectionString
