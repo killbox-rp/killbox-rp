@@ -48,6 +48,7 @@ const postgresConnectionString = `${POSTGRES_CONN_STR}`
 
 const postgresStoreConfig = () => {
   const storeConfig = {
+    conString: postgresConnectionString,
     ssl: { rejectUnauthorized: false }
   }
   console.log(storeConfig)
@@ -85,8 +86,8 @@ app.use((req, res, next) => {
   next()
 })
 
-const db = getDb(postgresConnectionString)
-configurePassport(app, passport, db)
-configureRoutes(app, passport, db)
+// const db = getDb(postgresConnectionString)
+// configurePassport(app, passport, db)
+// configureRoutes(app, passport, db)
 
 app.listen(API_PORT || PORT, () => console.log(`listening on ${API_PORT || PORT} from ${API_ENV}`))
