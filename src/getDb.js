@@ -13,8 +13,8 @@ const pg = require('pg')
 const pgConStr = require('pg-connection-string')
 const { Pool } = pg
 
-const getDb = (conStr) => {
-  const poolConfig = { ...pgConStr.parse(`${conStr}`), ssl: { rejectUnauthorized: false }}
+const getDb = (connectionString) => {
+  const poolConfig = { connectionString, ssl: { rejectUnauthorized: false }}
   console.log(poolConfig)
   const dbClient = new Pool(poolConfig)
   const db = {
