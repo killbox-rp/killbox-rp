@@ -28,33 +28,7 @@ const authenticated = (req, res, next) => {
   }
 }
 
-const getEmailText = (username, email, password, key) => {
-  return `Hello, ${username}.
-
-Here is your account information:
-
-  Username: ${username}
-  E-mail: ${email}
-  Password: ${password}
-
-Use the following link to confirm your e-mail, and begin using the platform.
-
-  https://${VUE_APP_REST_API}/confirm-email/${key}
-
-Good luck.
-
-You're recieving this e-mail because somebody signed up for archaeon, a platform for dayz nitrado public slot server modding.`
-}
-
 module.exports = (app, passport, db) => {
-
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'archaeonplatform@gmail.com',
-      pass: `${ARCHAEON_PLATFORM_GMAIL_PASSWORD}`
-    }
-  })
 
   const simpleQuery = async (req, res, query = '', params = [], cb = () => {}, compress = false, dilute = false) => {
     try {
@@ -96,42 +70,6 @@ module.exports = (app, passport, db) => {
   app.get('/', async (req, res) => {
     const message = 'hi'
     res.json({ message })
-  })
-
-  app.get('/dayz_gamepedia/*', db.connected(), authenticated, async (req, res) => {
-    const request = url.parse(req.url)
-
-    const options = {
-        host:    'static.wikia.nocookie.net',
-        port:    443,
-        path:    request.path,
-        method:  req.method,
-        headers: {},
-    }
-    
-    // console.log(`${options.method} https://${options.host}${options.path}`)
-    
-    const backend_req = https.request(options, (backend_res) => {
-    
-        res.writeHead(backend_res.statusCode, backend_res.headers)
-    
-        backend_res.on('data', (chunk) => {
-            res.write(chunk)
-        })
-    
-        backend_res.on('end', () => {
-            res.end()
-        })
-    
-    })
-    
-    req.on('data', (chunk) => {
-        backend_req.write(chunk)
-    })
-    
-    req.on('end', () => {
-        backend_req.end()
-    })
   })
   
   app.post('/api/v2/authenticate', passport.authenticate('local', { failureRedirect: '/api/v2/unauthorized', failureMessage: true }), async (req, res) => {
@@ -247,21 +185,6 @@ module.exports = (app, passport, db) => {
       res.status(201)
       res.send(result.rows)
       res.end()
-      // SEND E-MAIL
-      const mailOptions = {
-        from: 'Archaeon Platform <no-reply@archaeon.io>',
-        to: 'braungoodson@gmail.com', // email
-        priority: 'high',
-        subject: 'Welcome to Archaeon. Confirm your e-mail within.',
-        text: getEmailText(username, email, password, key)
-      }
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error)
-        } else {
-          console.log(info)
-        }
-      })
     } catch (error) {
       console.log(error)
       res.status(401)

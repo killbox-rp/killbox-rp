@@ -44,13 +44,12 @@ const { version } = require('../package.json')
 
 const app = express()
 const origin = CORS_ORIGIN
-const postgresConnectionString = `${POSTGRES_CONN_STR}?sslmode=no-verify`
+const postgresConnectionString = `${POSTGRES_CONN_STR}`
 
 const postgresStoreConfig = () => {
   const conString = postgresConnectionString
   return {
-    conString,
-    ssl: { rejectUnauthorized: false }
+    conString
   }
 }
 
@@ -59,7 +58,6 @@ const expressSessionCookie = (app) => {
     expires: 1000 * 60 * 60 * 24 * 3 // 3 days
   }
   if (NODE_ENV === 'prod') {
-    app.set('trust proxy', 1)
     return {
       ...cookie,
       secure: true,
@@ -82,7 +80,7 @@ app.use(session({
   cookie: expressSessionCookie(app)
 }))
 app.use((req, res, next) => {
-  res.set('X-Jammer-1-API-Version', `v${version}`)
+  res.set('X-Killbox-RP-API-Version', `v${version}`)
   next()
 })
 
