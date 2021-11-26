@@ -11,10 +11,12 @@ const {
 
 const pg = require('pg')
 const pgConStr = require('pg-connection-string')
-const { Client } = pg
+const { Pool } = pg
 
 const getDb = (conStr) => {
-  const dbClient = new Client({ ...pgConStr.parse(`${conStr}`), ssl: { rejectUnauthorized: false }})
+  const poolConfig = { ...pgConStr.parse(`${conStr}`), ssl: { rejectUnauthorized: false }}
+  console.log(poolConfig)
+  const dbClient = new Pool(poolConfig)
   const db = {
     $connected: false,
     query (query, params) {

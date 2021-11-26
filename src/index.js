@@ -48,10 +48,12 @@ const postgresConnectionString = `${POSTGRES_CONN_STR}`
 
 const postgresStoreConfig = () => {
   const conString = postgresConnectionString
-  return {
+  const storeConfig = {
     conString,
     ssl: { rejectUnauthorized: false }
   }
+  console.log(storeConfig)
+  return storeConfig
 }
 
 const expressSessionCookie = (app) => {
