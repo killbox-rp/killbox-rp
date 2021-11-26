@@ -49,7 +49,8 @@ const postgresConnectionString = `${POSTGRES_CONN_STR}?ssl=true`
 const postgresStoreConfig = () => {
   const conString = postgresConnectionString
   return {
-    conString
+    conString,
+    ssl: { rejectUnauthorized: false }
   }
 }
 
