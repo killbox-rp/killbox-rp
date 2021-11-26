@@ -52,7 +52,6 @@ const postgresStoreConfig = () => {
   const storeConfig = {
     pool: db.getClient()
   }
-  console.log(storeConfig)
   return storeConfig
 }
 
