@@ -46,10 +46,11 @@ const app = express()
 const origin = CORS_ORIGIN
 const postgresConnectionString = `${POSTGRES_CONN_STR}`
 
+const db = getDb(postgresConnectionString)
+
 const postgresStoreConfig = () => {
   const storeConfig = {
-    conString: postgresConnectionString,
-    ssl: { rejectUnauthorized: false }
+    pool: db.getClient()
   }
   console.log(storeConfig)
   return storeConfig
@@ -78,7 +79,7 @@ app.use(session({
   secret: EXPRESS_SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
-  // store: new PostgreSqlStore(postgresStoreConfig()),
+  store: new PostgreSqlStore(postgresStoreConfig()),
   cookie: expressSessionCookie(app)
 }))
 app.use((req, res, next) => {
@@ -86,8 +87,7 @@ app.use((req, res, next) => {
   next()
 })
 
-const db = getDb(postgresConnectionString)
-// configurePassport(app, passport, db)
-// configureRoutes(app, passport, db)
+configurePassport(app, passport, db)
+configureRoutes(app, passport, db)
 
 app.listen(API_PORT || PORT, () => console.log(`listening on ${API_PORT || PORT} from ${API_ENV}`))

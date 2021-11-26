@@ -35,6 +35,9 @@ const getDb = (connectionString) => {
           res.end()
         }
       }
+    },
+    getClient () {
+      return dbClient
     }
   }
   try {
