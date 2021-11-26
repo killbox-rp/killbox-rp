@@ -47,9 +47,9 @@ const origin = CORS_ORIGIN
 const postgresConnectionString = `${POSTGRES_CONN_STR}`
 
 const postgresStoreConfig = () => {
-  const conString = postgresConnectionString
+  const connectionString = postgresConnectionString
   const storeConfig = {
-    conString,
+    connectionString,
     ssl: { rejectUnauthorized: false }
   }
   console.log(storeConfig)
