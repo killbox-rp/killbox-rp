@@ -78,7 +78,7 @@ app.use(session({
   secret: EXPRESS_SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
-  store: new PostgreSqlStore(postgresStoreConfig()),
+  // store: new PostgreSqlStore(postgresStoreConfig()),
   cookie: expressSessionCookie(app)
 }))
 app.use((req, res, next) => {
@@ -86,7 +86,7 @@ app.use((req, res, next) => {
   next()
 })
 
-// const db = getDb(postgresConnectionString)
+const db = getDb(postgresConnectionString)
 // configurePassport(app, passport, db)
 // configureRoutes(app, passport, db)
 
